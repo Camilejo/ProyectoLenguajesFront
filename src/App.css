@@ -1,42 +1,98 @@
+/* App.css - Estilos específicos de la aplicación */
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
+/* Animaciones para las cards */
+@keyframes slideInUp {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(30px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.card-animate {
+  animation: slideInUp 0.5s ease-out;
+}
+
+/* Estilos para el contenido de las cards */
+.jwt-output {
+  font-family: "Fira Code", "Consolas", monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+/* Estados de validación */
+.validation-success {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.validation-error {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.validation-warning {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+/* Efectos de hover mejorados */
+.interactive-element {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.interactive-element:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+}
+
+/* Loader personalizado */
+@keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+.loader {
+  border: 3px solid rgba(99, 102, 241, 0.1);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none;
   }
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+@media (min-width: 769px) {
+  .show-on-mobile {
+    display: none;
+  }
 }
