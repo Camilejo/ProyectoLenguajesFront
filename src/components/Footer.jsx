@@ -19,7 +19,7 @@ const Footer = () => {
   return (
     <Box sx={styles.footer}>
       <Container maxWidth="lg">
-        <Stack spacing={3} alignItems="center">
+        <Stack spacing={1.5} alignItems="center">
           {/* Universidad */}
           <Box sx={styles.section}>
             <SchoolIcon sx={styles.icon} />

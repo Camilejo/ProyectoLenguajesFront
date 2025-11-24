@@ -69,7 +69,7 @@ const JWTExample = () => {
   return (
     <Box sx={{ maxWidth: 1200, margin: "0 auto", p: 3 }}>
       <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: "center" }}>
-        🔐 Ejemplo de Uso - JWT Manager
+        Ejemplo de Uso - JWT Manager
       </Typography>
 
       <Stack spacing={3}>

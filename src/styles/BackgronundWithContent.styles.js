@@ -70,7 +70,7 @@ export const backgroundStyles = (theme) => ({
     minHeight: '70vh',
     px: { xs: 2, sm: 3, md: 4 },
     display: 'grid',
-    gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+    gridTemplateColumns: { xs: '1fr', md: '1.2fr 1.5fr' },
     gap: 3
   },
   leftColumn: {
@@ -143,18 +143,18 @@ export const cardStyles = (theme) => ({
 
   // Diferentes altos para las cards derechas
   tallCard: {
-    minHeight: { xs: '200px', lg: '250px' },
-    height: { xs: '200px', lg: '250px' }
+    minHeight: { xs: '280px', lg: '320px' },
+    height: { xs: '280px', lg: '320px' }
   },
 
   mediumCard: {
-    minHeight: { xs: '180px', lg: '200px' },
-    height: { xs: '180px', lg: '200px' }
+    minHeight: { xs: '250px', lg: '280px' },
+    height: { xs: '250px', lg: '280px' }
   },
 
   shortCard: {
-    minHeight: { xs: '160px', lg: '180px' },
-    height: { xs: '160px', lg: '180px' }
+    minHeight: { xs: '220px', lg: '250px' },
+    height: { xs: '220px', lg: '250px' }
   },
 
   sideCardContent: {

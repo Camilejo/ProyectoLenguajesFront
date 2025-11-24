@@ -24,6 +24,13 @@ import {
 } from "@mui/material"
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz"
 import SendIcon from "@mui/icons-material/Send"
+import LockIcon from "@mui/icons-material/Lock"
+import VerifiedIcon from "@mui/icons-material/Verified"
+import CodeIcon from "@mui/icons-material/Code"
+import DataObjectIcon from "@mui/icons-material/DataObject"
+import FingerprintIcon from "@mui/icons-material/Fingerprint"
+import ArticleIcon from "@mui/icons-material/Article"
+import SecurityIcon from "@mui/icons-material/Security"
 import {
   backgroundStyles,
   cardStyles,
@@ -94,7 +101,7 @@ const BackgroundWithContent = () => {
     const result = await verifyToken(jwtInput)
 
     // Debug: Ver qué estructura tiene el resultado
-    console.log("🔍 Resultado de verificación:", result)
+    console.log("Resultado de verificación:", result)
 
     if (result.success) {
       // Si el backend devuelve datos completos del token, mostrarlos
@@ -133,9 +140,32 @@ const BackgroundWithContent = () => {
       <Box sx={styles.contentContainer}>
         {/* Header Section */}
         <Box sx={styles.headerSection}>
-          <Typography variant="h3" sx={styles.mainTitle}>
-            🔐 JWT Token Manager
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 2,
+              mb: 2,
+            }}
+          >
+            <LockIcon
+              sx={{
+                fontSize: 48,
+                color: theme.palette.primary.main,
+                mt: 0.5, // Pequeño ajuste para alinear con el texto
+              }}
+            />
+            <Typography
+              variant="h3"
+              sx={{
+                ...styles.mainTitle,
+                mb: 0, // Eliminar el margin bottom del título
+              }}
+            >
+              JWT Token Manager
+            </Typography>
+          </Box>
           <Typography variant="body1" sx={styles.subtitle}>
             Herramienta profesional para generar, verificar y decodificar tokens
             JWT de forma segura
@@ -149,9 +179,31 @@ const BackgroundWithContent = () => {
             {/* Tu card grande aquí */}
             <Card sx={cardStylesObj.mainCard}>
               <CardContent sx={cardStylesObj.mainCardContent}>
-                <Typography variant="h6" sx={cardStylesObj.cardHeader}>
-                  🎯 JWT Token
-                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1.5,
+                    mb: 2,
+                    pb: 1.5,
+                    borderBottom: `2px solid ${theme.palette.primary.main}20`,
+                  }}
+                >
+                  <SecurityIcon
+                    sx={{ color: theme.palette.primary.main, fontSize: 28 }}
+                  />
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: theme.palette.primary.main,
+                      fontWeight: 700,
+                      fontSize: "1.2rem",
+                      m: 0,
+                    }}
+                  >
+                    JWT Token
+                  </Typography>
+                </Box>
                 <TextField
                   multiline
                   rows={isMobile ? 8 : 14}
@@ -212,12 +264,19 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
                   >
                     {verificationResult.valid ? (
                       <Box>
-                        <Typography
-                          variant="body2"
-                          sx={{ fontWeight: "bold", mb: 0.5 }}
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
                         >
-                          ✅ Token válido y verificado
-                        </Typography>
+                          <VerifiedIcon
+                            sx={{ color: "success.main", fontSize: 18 }}
+                          />
+                          <Typography
+                            variant="body2"
+                            sx={{ fontWeight: "bold", mb: 0.5 }}
+                          >
+                            Token válido y verificado
+                          </Typography>
+                        </Box>
                         {(() => {
                           // Buscar exp en diferentes ubicaciones posibles
                           let exp = null
@@ -272,22 +331,39 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
                         })()}
                         {verificationResult.datos &&
                           verificationResult.datos.esNuestroToken && (
-                            <Typography
-                              variant="caption"
-                              sx={{ display: "block", color: "success.dark" }}
-                            ></Typography>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
+                                mt: 0.5,
+                              }}
+                            >
+                              <LockIcon
+                                sx={{ color: "success.dark", fontSize: 16 }}
+                              />
+                              <Typography
+                                variant="caption"
+                                sx={{ display: "block", color: "success.dark" }}
+                              >
+                                Token firmado con nuestra clave secreta
+                              </Typography>
+                            </Box>
                           )}
                       </Box>
                     ) : (
                       <Box>
-                        <Typography
-                          variant="body2"
-                          sx={{ fontWeight: "bold", mb: 0.5 }}
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
                         >
-                          ⚠️{" "}
-                          {verificationResult.mensaje ||
-                            "Token inválido o expirado"}
-                        </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{ fontWeight: "bold", mb: 0.5 }}
+                          >
+                            {verificationResult.mensaje ||
+                              "Token inválido o expirado"}
+                          </Typography>
+                        </Box>
                         {verificationResult.razon && (
                           <Typography
                             variant="caption"
@@ -310,7 +386,12 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
             <Card sx={{ ...cardStylesObj.sideCard, ...cardStylesObj.tallCard }}>
               <CardContent sx={cardStylesObj.sideCardContent}>
                 <Box sx={cardStylesObj.cardHeaderWithButton}>
-                  <Typography variant="h6">📝 Payload</Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <DataObjectIcon
+                      sx={{ color: theme.palette.success.main, fontSize: 20 }}
+                    />
+                    <Typography variant="h6">Payload</Typography>
+                  </Box>
                   <IconButton
                     size="small"
                     sx={cardStylesObj.swapButton}
@@ -463,7 +544,12 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
             >
               <CardContent sx={cardStylesObj.sideCardContent}>
                 <Box sx={cardStylesObj.cardHeaderWithButton}>
-                  <Typography variant="h6">🔍 Header</Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <ArticleIcon
+                      sx={{ color: theme.palette.info.main, fontSize: 20 }}
+                    />
+                    <Typography variant="h6">Header</Typography>
+                  </Box>
                   <IconButton
                     size="small"
                     sx={cardStylesObj.swapButton}
@@ -557,7 +643,12 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
             >
               <CardContent sx={cardStylesObj.sideCardContent}>
                 <Box sx={cardStylesObj.cardHeaderWithButton}>
-                  <Typography variant="h6">✍️ Signature</Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <FingerprintIcon
+                      sx={{ color: theme.palette.warning.main, fontSize: 20 }}
+                    />
+                    <Typography variant="h6">Signature</Typography>
+                  </Box>
                   <IconButton
                     size="small"
                     sx={cardStylesObj.swapButton}
@@ -585,7 +676,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
                       fullWidth
                       value={
                         signatureData
-                          ? `✅ ${signatureData}`
+                          ? `${signatureData}`
                           : "Esperando verificación..."
                       }
                       InputProps={{ readOnly: true }}

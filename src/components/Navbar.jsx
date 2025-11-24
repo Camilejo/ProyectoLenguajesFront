@@ -22,7 +22,7 @@ const Navbar = () => {
       <Toolbar sx={styles.toolbar}>
         {/* Logo */}
         <Typography variant="h6" component="div" sx={styles.logo}>
-          🔐 JWT Tool
+          JWT Tool
         </Typography>
 
         {/* Menu Items - Como en la imagen */}

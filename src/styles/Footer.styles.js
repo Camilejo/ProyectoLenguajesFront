@@ -5,8 +5,8 @@ export const footerStyles = (theme) => ({
     footer: {
         background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.95)}, ${alpha(theme.palette.secondary.main, 0.95)})`,
         color: 'white',
-        py: 5,
-        mt: 8,
+        py: 2.5,
+        mt: 4,
         position: 'relative',
         overflow: 'hidden',
         '&::before': {
@@ -33,14 +33,14 @@ export const footerStyles = (theme) => ({
     },
 
     icon: {
-        fontSize: '2rem',
+        fontSize: '1.5rem',
         color: 'white',
         filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
     },
 
     universityName: {
         fontWeight: 800,
-        fontSize: '1.8rem',
+        fontSize: '1.2rem',
         letterSpacing: '0.1em',
         textShadow: '0 2px 8px rgba(0,0,0,0.3)',
         position: 'relative',
@@ -49,7 +49,7 @@ export const footerStyles = (theme) => ({
 
     subject: {
         fontWeight: 600,
-        fontSize: '1.1rem',
+        fontSize: '0.95rem',
         color: alpha('#fff', 0.95),
         textShadow: '0 1px 4px rgba(0,0,0,0.2)',
         position: 'relative',
@@ -66,7 +66,7 @@ export const footerStyles = (theme) => ({
 
     integratesTitle: {
         fontWeight: 700,
-        fontSize: '1.1rem',
+        fontSize: '1rem',
         textTransform: 'uppercase',
         letterSpacing: '0.05em',
         textShadow: '0 1px 4px rgba(0,0,0,0.2)',
