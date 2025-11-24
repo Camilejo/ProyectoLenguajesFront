@@ -70,6 +70,7 @@ const BackgroundWithContent = () => {
   const [signatureData, setSignatureData] = useState(null)
   const [showVerificationToast, setShowVerificationToast] = useState(false)
   const [showErrorToast, setShowErrorToast] = useState(false)
+  const [keyInput, setKeyInput] = useState("") // Nuevo estado para la clave
 
   const handleToggleView = (component) => {
     setActiveViews((prev) => ({
@@ -210,6 +211,7 @@ const BackgroundWithContent = () => {
                     JWT Token
                   </Typography>
                 </Box>
+                {/* TextField para Token */}
                 <TextField
                   multiline
                   rows={isMobile ? 8 : 14}
@@ -220,34 +222,57 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
                   fullWidth
                   value={jwtInput}
                   onChange={(e) => setJwtInput(e.target.value)}
-                  sx={cardStylesObj.textField}
-                />
-                <Box
                   sx={{
-                    display: "flex",
-                    gap: 2,
-                    mt: 2,
+                    ...cardStylesObj.textField,
+                    flex: 'initial',
+                    '& .MuiOutlinedInput-root': {
+                      height: 'auto',
+                      alignItems: 'flex-start'
+                    },
+                    '& .MuiInputBase-input': {
+                      height: 'auto !important'
+                    }
+                  }}
+                />
+
+                {/* TextField para Key/Clave */}
+                <TextField
+                  type="password"
+                  placeholder="Ingresa la clave (opcional)"
+                  variant="outlined"
+                  fullWidth
+                  value={keyInput}
+                  onChange={(e) => setKeyInput(e.target.value)}
+                  sx={{
+                    ...cardStylesObj.textField,
+                    mt: 0.5,
+                    "& .MuiOutlinedInput-root": {
+                      height: "42px",
+                      display: "flex",
+                      alignItems: "center",
+                    },
+                  }}
+                />
+
+                <Button
+                  variant="contained"
+                  fullWidth
+                  startIcon={
+                    loading ? <CircularProgress size={20} /> : <SendIcon />
+                  }
+                  onClick={handleVerifyToken}
+                  disabled={loading || !jwtInput.trim()}
+                  sx={{
+                    mt: 0.5,
+                    minHeight: "42px",
+                    background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                    "&:hover": {
+                      background: `linear-gradient(135deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
+                    },
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    startIcon={
-                      loading ? <CircularProgress size={20} /> : <SendIcon />
-                    }
-                    onClick={handleVerifyToken}
-                    disabled={loading || !jwtInput.trim()}
-                    sx={{
-                      minHeight: "42px", // Altura fija para evitar saltos
-                      background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                      "&:hover": {
-                        background: `linear-gradient(135deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
-                      },
-                    }}
-                  >
-                    Verificar Token
-                  </Button>
-                </Box>
+                  Verificar Token
+                </Button>
               </CardContent>
             </Card>
           </Box>

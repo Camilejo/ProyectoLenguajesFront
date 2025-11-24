@@ -74,8 +74,7 @@ export const backgroundStyles = (theme) => ({
     gap: 3
   },
   leftColumn: {
-    gridColumn: { xs: '1', md: '1' },
-    gridRow: { xs: 'auto', md: '1 / 4' }
+    gridColumn: { xs: '1', md: '1' }
   },
   rightColumn: {
     display: 'flex',
@@ -91,7 +90,8 @@ export const cardStyles = (theme) => ({
     background: 'linear-gradient(to bottom right, #ffffff 0%, #fafafa 100%)',
     borderRadius: 3,
     height: '100%',
-    minHeight: { xs: '300px', lg: '650px' },
+    height: 'auto',
+    minHeight: { xs: '300px', lg: '400px' },
     boxShadow: `0 10px 40px ${alpha(theme.palette.primary.main, 0.12)}, 
                 0 2px 8px ${alpha(theme.palette.primary.main, 0.08)}`,
     border: `2px solid ${alpha(theme.palette.primary.main, 0.15)}`,
@@ -117,7 +117,7 @@ export const cardStyles = (theme) => ({
 
   mainCardContent: {
     padding: '24px !important',
-    height: '100%',
+    height: 'auto',
     display: 'flex',
     flexDirection: 'column'
   },
