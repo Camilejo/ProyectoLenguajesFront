@@ -21,6 +21,7 @@ import {
   Alert,
   useTheme,
   useMediaQuery,
+  Snackbar,
 } from "@mui/material"
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz"
 import SendIcon from "@mui/icons-material/Send"
@@ -48,11 +49,9 @@ const BackgroundWithContent = () => {
     generateToken,
     verifyToken,
     decodeToken,
-    token,
     loading,
     error,
     verificationResult,
-    decodedData,
   } = useJWT()
 
   const [activeViews, setActiveViews] = useState({
@@ -69,6 +68,8 @@ const BackgroundWithContent = () => {
   const [headerData, setHeaderData] = useState(null)
   const [payloadData, setPayloadData] = useState(null)
   const [signatureData, setSignatureData] = useState(null)
+  const [showVerificationToast, setShowVerificationToast] = useState(false)
+  const [showErrorToast, setShowErrorToast] = useState(false)
 
   const handleToggleView = (component) => {
     setActiveViews((prev) => ({
@@ -87,7 +88,7 @@ const BackgroundWithContent = () => {
         // Decodificar automáticamente para mostrar header y payload
         await handleDecodeToken(result.token)
       }
-    } catch (err) {
+    } catch {
       alert("Error: El payload debe ser un JSON válido")
     }
   }
@@ -98,12 +99,15 @@ const BackgroundWithContent = () => {
       alert("Por favor ingresa un token JWT")
       return
     }
+
     const result = await verifyToken(jwtInput)
 
     // Debug: Ver qué estructura tiene el resultado
     console.log("Resultado de verificación:", result)
 
     if (result.success) {
+      setShowVerificationToast(true) // Mostrar notificación de éxito
+
       // Si el backend devuelve datos completos del token, mostrarlos
       if (result.data && result.data.datos) {
         const { header, payload, signature } = result.data.datos
@@ -116,6 +120,8 @@ const BackgroundWithContent = () => {
         // Si no hay datos del backend, decodificar localmente
         await handleDecodeToken(jwtInput)
       }
+    } else {
+      setShowErrorToast(true) // Mostrar notificación de error
     }
   }
 
@@ -221,7 +227,6 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
                     display: "flex",
                     gap: 2,
                     mt: 2,
-                    flexDirection: isMobile ? "column" : "row",
                   }}
                 >
                   <Button
@@ -233,6 +238,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
                     onClick={handleVerifyToken}
                     disabled={loading || !jwtInput.trim()}
                     sx={{
+                      minHeight: "42px", // Altura fija para evitar saltos
                       background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
                       "&:hover": {
                         background: `linear-gradient(135deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
@@ -241,141 +247,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
                   >
                     Verificar Token
                   </Button>
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    onClick={() => handleDecodeToken()}
-                    disabled={loading || !jwtInput.trim()}
-                  >
-                    Decodificar
-                  </Button>
                 </Box>
-
-                {/* Mensajes de error o éxito */}
-                {error && (
-                  <Alert severity="error" sx={{ mt: 2 }}>
-                    {error}
-                  </Alert>
-                )}
-                {verificationResult && !error && (
-                  <Alert
-                    severity={verificationResult.valid ? "success" : "warning"}
-                    sx={{ mt: 2 }}
-                  >
-                    {verificationResult.valid ? (
-                      <Box>
-                        <Box
-                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                        >
-                          <VerifiedIcon
-                            sx={{ color: "success.main", fontSize: 18 }}
-                          />
-                          <Typography
-                            variant="body2"
-                            sx={{ fontWeight: "bold", mb: 0.5 }}
-                          >
-                            Token válido y verificado
-                          </Typography>
-                        </Box>
-                        {(() => {
-                          // Buscar exp en diferentes ubicaciones posibles
-                          let exp = null
-
-                          if (verificationResult.datos) {
-                            // Buscar en datos.exp (cadena ISO del backend)
-                            exp = verificationResult.datos.exp
-
-                            // Si no está ahí, buscar en datos.payload.exp (número timestamp)
-                            if (!exp && verificationResult.datos.payload) {
-                              exp = verificationResult.datos.payload.exp
-                            }
-                          }
-
-                          if (exp) {
-                            let fechaExpiracion = null
-
-                            // Si es una cadena ISO (formato: "2024-11-23T10:00:00.000Z")
-                            if (typeof exp === "string") {
-                              fechaExpiracion = new Date(exp)
-                            }
-                            // Si es un timestamp numérico (segundos desde epoch)
-                            else if (typeof exp === "number") {
-                              fechaExpiracion = new Date(exp * 1000)
-                            }
-
-                            // Verificar que la fecha sea válida
-                            if (
-                              fechaExpiracion &&
-                              !isNaN(fechaExpiracion.getTime())
-                            ) {
-                              return (
-                                <Typography
-                                  variant="caption"
-                                  sx={{ display: "block" }}
-                                >
-                                  Expira:{" "}
-                                  {fechaExpiracion.toLocaleString("es-ES", {
-                                    year: "numeric",
-                                    month: "2-digit",
-                                    day: "2-digit",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    second: "2-digit",
-                                  })}
-                                </Typography>
-                              )
-                            }
-                          }
-
-                          return null
-                        })()}
-                        {verificationResult.datos &&
-                          verificationResult.datos.esNuestroToken && (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 1,
-                                mt: 0.5,
-                              }}
-                            >
-                              <LockIcon
-                                sx={{ color: "success.dark", fontSize: 16 }}
-                              />
-                              <Typography
-                                variant="caption"
-                                sx={{ display: "block", color: "success.dark" }}
-                              >
-                                Token firmado con nuestra clave secreta
-                              </Typography>
-                            </Box>
-                          )}
-                      </Box>
-                    ) : (
-                      <Box>
-                        <Box
-                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                        >
-                          <Typography
-                            variant="body2"
-                            sx={{ fontWeight: "bold", mb: 0.5 }}
-                          >
-                            {verificationResult.mensaje ||
-                              "Token inválido o expirado"}
-                          </Typography>
-                        </Box>
-                        {verificationResult.razon && (
-                          <Typography
-                            variant="caption"
-                            sx={{ display: "block" }}
-                          >
-                            {verificationResult.razon}
-                          </Typography>
-                        )}
-                      </Box>
-                    )}
-                  </Alert>
-                )}
               </CardContent>
             </Card>
           </Box>
@@ -732,6 +604,63 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
           </Box>
         </Box>
       </Box>
+
+      {/* Notificaciones Toast */}
+      {/* Notificación de verificación exitosa */}
+      <Snackbar
+        open={showVerificationToast}
+        autoHideDuration={4000}
+        onClose={() => setShowVerificationToast(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={() => setShowVerificationToast(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <VerifiedIcon sx={{ fontSize: 18 }} />
+            <Box>
+              <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                Token válido y verificado
+              </Typography>
+              {verificationResult?.datos?.exp && (
+                <Typography variant="caption">
+                  Expira:{" "}
+                  {new Date(
+                    typeof verificationResult.datos.exp === "string"
+                      ? verificationResult.datos.exp
+                      : verificationResult.datos.exp * 1000
+                  ).toLocaleString("es-ES")}
+                </Typography>
+              )}
+            </Box>
+          </Box>
+        </Alert>
+      </Snackbar>
+
+      {/* Notificación de error */}
+      <Snackbar
+        open={showErrorToast || (error && !loading)}
+        autoHideDuration={5000}
+        onClose={() => setShowErrorToast(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={() => setShowErrorToast(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+            {error || "Error al procesar el token"}
+          </Typography>
+          {error?.includes("tiempo de espera") && (
+            <Typography variant="caption" display="block" sx={{ mt: 0.5 }}>
+              💡 El servidor puede tardar ~50 segundos en despertar
+            </Typography>
+          )}
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }
